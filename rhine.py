@@ -1,3 +1,10 @@
+#NB: before running the code, make sure you have installed the following libraries
+#pip install opencv-python
+#pip install numpy
+#pip install pillow
+#Install libraries
+#pip install opencv-python numpy pillow
+
 import cv2
 import numpy as np
 import tkinter as tk
@@ -52,6 +59,41 @@ class ImageEditor:
         self.cropped_canvas = tk.Canvas(self.right_panel, bg="#3C3C3C", width=200, height=200, highlightthickness=0)
         self.cropped_canvas.pack(pady=20)
         
+         # Resize Slider
+        self.resize_label = tk.Label(self.right_panel, text="Resize Cropped Image", bg="#252526", fg="white", font=("Arial", 10))
+        self.resize_label.pack(pady=5)
+        self.resize_slider = tk.Scale(self.right_panel, from_=10, to=200, orient=tk.HORIZONTAL, command=self.resize_cropped_image, bg="#252526", fg="white", troughcolor="#3C3C3C")
+        self.resize_slider.set(100)
+        self.resize_slider.pack(pady=10)
+        
+        # Image Processing Buttons
+        self.grayscale_button = tk.Button(self.right_panel, text="Grayscale", command=self.toggle_grayscale, bg="#555555", fg="white", font=("Arial", 10), width=15, bd=0, relief=tk.FLAT)
+        self.grayscale_button.pack(pady=5)
+        
+        self.brightness_label = tk.Label(self.right_panel, text="Adjust Brightness", bg="#252526", fg="white", font=("Arial", 10))
+        self.brightness_label.pack(pady=5)
+        self.brightness_slider = tk.Scale(self.right_panel, from_=0.0, to=2.0, resolution=0.1, orient=tk.HORIZONTAL, command=self.adjust_brightness, bg="#252526", fg="white", troughcolor="#3C3C3C")
+        self.brightness_slider.set(1.0)
+        self.brightness_slider.pack(pady=10)
+        
+        self.rotate_button = tk.Button(self.right_panel, text="Rotate 90°", command=self.rotate_image, bg="#555555", fg="white", font=("Arial", 10), width=15, bd=0, relief=tk.FLAT)
+        self.rotate_button.pack(pady=5)
+        
+        # Save Button
+        self.save_button = tk.Button(self.right_panel, text="Save Image", command=self.save_image, bg="#D83B01", fg="white", font=("Arial", 12, "bold"), width=20, bd=0, relief=tk.FLAT)
+        self.save_button.pack(pady=20)
+        
+        # Undo/Redo Buttons
+        self.undo_button = tk.Button(self.right_panel, text="Undo (Ctrl+Z)", command=self.undo, bg="#555555", fg="white", font=("Arial", 10), width=15, bd=0, relief=tk.FLAT)
+        self.undo_button.pack(pady=5)
+        self.redo_button = tk.Button(self.right_panel, text="Redo (Ctrl+Y)", command=self.redo, bg="#555555", fg="white", font=("Arial", 10), width=15, bd=0, relief=tk.FLAT)
+        self.redo_button.pack(pady=5)
+        
+        # Keyboard Shortcuts
+        self.root.bind("<Control-z>", lambda event: self.undo())
+        self.root.bind("<Control-y>", lambda event: self.redo())
+
+
        
     
     def load_image(self):
